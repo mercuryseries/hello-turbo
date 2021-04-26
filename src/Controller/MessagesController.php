@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -40,20 +41,21 @@ class MessagesController extends AbstractController
             ->getForm()
         ;
 
-        $form->handleRequest($request);
+        return $this->handleForm(
+            $form,
+            $request,
+            onSuccess: function (FormInterface $form, array $data) {
+                dump(sprintf('Incoming email from %s <%s>', $data['name'], $data['email']));
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $formData = $form->getData();
+                $this->addFlash('success', "Message sent! We'll get back to you very soon.");
 
-            dump(sprintf('Incoming email from %s <%s>', $formData['name'], $formData['email']));
-
-            $this->addFlash('success', "Message sent! We'll get back to you very soon.");
-
-            return $this->redirectToRoute('app_home');
-        }
-
-        return $this->render('messages/new.html.twig', [
-            'form' => $form->createView()
-        ]);
+                return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
+            },
+            render: function (FormInterface $form, ?array $data) {
+                return $this->render('messages/new.html.twig', [
+                    'form' => $form->createView()
+                ]);
+            }
+        );
     }
 }
