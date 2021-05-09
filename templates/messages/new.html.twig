@@ -5,11 +5,13 @@
 {% block body %}
     <h1>Contact</h1>
 
-    {{ form_start(form) }}
-        {{ form_row(form.name, {'attr': {'placeholder': 'Ex: John Doe'}}) }}
-        {{ form_row(form.email, {'attr': {'placeholder': 'Ex: johndoe@example.com'}}) }}
-        {{ form_row(form.message, {'attr': {'placeholder': 'Please enter your message here...'}}) }}
-        
-        <button type="submit" formnovalidate>Send</button>
-    {{ form_end(form) }}
+    <div id="contact">
+        {{ form_start(form) }}
+            {{ form_row(form.name, {'attr': {'placeholder': 'Ex: John Doe'}}) }}
+            {{ form_row(form.email, {'attr': {'placeholder': 'Ex: johndoe@example.com'}}) }}
+            {{ form_row(form.message, {'attr': {'placeholder': 'Please enter your message here...'}}) }}
+            
+            <button type="submit" formnovalidate>Send</button>
+        {{ form_end(form) }}
+    </div>
 {% endblock %}
