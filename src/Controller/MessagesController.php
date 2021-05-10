@@ -48,13 +48,12 @@ class MessagesController extends AbstractController
                 dump(sprintf('Incoming email from %s <%s>', $data['name'], $data['email']));
                 
                 if (str_contains($request->headers->get('accept'), 'text/vnd.turbo-stream.html')) {
-                    return new Response(
-                        $this->renderView('messages/success.stream.html.twig', ['name' => $data['name']]),
-                        200,
-                        [
-                            'Content-Type' => 'text/vnd.turbo-stream.html'
-                        ]
+                    $response = new Response;
+                    $response->setContent(
+                        $this->renderView('messages/success.stream.html.twig', ['name' => $data['name']])
                     );
+                    $response->headers->set('Content-Type', 'text/vnd.turbo-stream.html');
+                    return $response;
                 }
 
                 $this->addFlash('success', "Message sent! We'll get back to you very soon.");
