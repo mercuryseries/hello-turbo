@@ -41,30 +41,29 @@ class MessagesController extends AbstractController
             ->getForm()
         ;
 
-        return $this->handleForm(
-            $form,
-            $request,
-            onSuccess: function (FormInterface $form, array $data) use ($request) {
-                dump(sprintf('Incoming email from %s <%s>', $data['name'], $data['email']));
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            dump(sprintf('Incoming email from %s <%s>', $data['name'], $data['email']));
                 
-                if (str_contains($request->headers->get('accept'), 'text/vnd.turbo-stream.html')) {
-                    $response = new Response;
-                    $response->setContent(
-                        $this->renderView('messages/success.stream.html.twig', ['name' => $data['name']])
-                    );
-                    $response->headers->set('Content-Type', 'text/vnd.turbo-stream.html');
-                    return $response;
-                }
-
-                $this->addFlash('success', "Message sent! We'll get back to you very soon.");
-
-                return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
-            },
-            render: function (FormInterface $form, ?array $data) {
-                return $this->render('messages/new.html.twig', [
-                    'form' => $form->createView()
-                ]);
+            if (str_contains($request->headers->get('accept'), 'text/vnd.turbo-stream.html')) {
+                $response = new Response;
+                $response->setContent(
+                    $this->renderView('messages/success.stream.html.twig', ['name' => $data['name']])
+                );
+                $response->headers->set('Content-Type', 'text/vnd.turbo-stream.html');
+                return $response;
             }
-        );
+
+            $this->addFlash('success', "Message sent! We'll get back to you very soon.");
+
+            return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('messages/new.html.twig', [
+            'form' => $form,
+        ]);
     }
 }
