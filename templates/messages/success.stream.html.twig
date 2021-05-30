@@ -1,7 +1,9 @@
-<turbo-stream action="replace" target="contact">
+<turbo-stream action="update" target="contact">
   <template>
     <div class="alert-success">
       Thanks "{{ name }}" for your message. We'll get back to you soon.
     </div>
+
+    {{ include('messages/_form.html.twig') }}
   </template>
 </turbo-stream>
