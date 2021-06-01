@@ -6,28 +6,12 @@
 
         {% block meta %}{% endblock %}
             
-        {# Run `composer require symfony/webpack-encore-bundle`
-           and uncomment the following Encore helpers to start using Symfony UX #}
         {% block stylesheets %}
-            {#{{ encore_entry_link_tags('app') }}#}
-            <style>
-                .turbo-progress-bar {
-                  height: 10px;
-                  background-color: orange;
-                }
-
-                .alert-success {
-                    color: green;
-                    font-weight: bold;
-                }
-            </style>
+            {{ encore_entry_link_tags('app') }}
         {% endblock %}
 
         {% block javascripts %}
-            {#{{ encore_entry_script_tags('app') }}#}
-            <script type="module">
-                import * as Turbo from 'https://cdn.skypack.dev/@hotwired/turbo';
-            </script>
+            {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
     <body>
